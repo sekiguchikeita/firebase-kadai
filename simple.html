@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Chatアプリ</title>
+</head>
+<body>
+
+<!-- コンテンツ表示画面 -->
+
+
+<div>
+  <div>名前<input type="text" id="username"></div>
+  <div>
+    <textarea name="" id="text"  rows="5"></textarea>
+    <button id="send">送信</button>
+  </div>
+  <!-- チャット文字リスト -->
+  <div id="output"></div>
+
+</div>
+
+
+
+
+<!--/ コンテンツ表示画面 -->
+
+
+
+<!-- JQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- JQuery -->
+
+
+<!--** 以下Firebase **-->
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyBmKPhOEigUanLqsgJsRp35MPw1dl1eALw",
+    authDomain: "gs-chat-21085.firebaseapp.com",
+    databaseURL: "https://gs-chat-21085.firebaseio.com",
+    projectId: "gs-chat-21085",
+    storageBucket: "gs-chat-21085.appspot.com",
+    messagingSenderId: "456581544293",
+    appId: "1:456581544293:web:5dae30f28e1a90ce68098c",
+    measurementId: "G-RV5YXDT74R"
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+
+  let newPostRef = firebase.database().ref();
+
+// 送信処理
+$("#send").on("click",function(){
+  newPostRef.push({
+    username:$("#username").val(),
+    text:$("#text").val()
+  });
+  $("#text").val("");
+});
+
+//送信処理
+$("#text").on("keydown",function(e){
+  console.log(e);
+  if(e.keyCode==13){
+    newPostRef.push({
+      username:$("#username").val(),
+      text:$("#text").val()
+    });
+    $("#text").val("");
+  }
+});
+
+// データ受信
+newPostRef.on("child_added",function(data){
+  const v = data.val();
+  const k = data.key;
+  const str = "";
+  str+="<dl>";
+  str += "<dt>" + v.username+"</dt>";
+  str +="<dd>"+v.text+"</dd>";
+  str+="</dl>";
+$("#output").append(str);
+
+});
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
